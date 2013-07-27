@@ -15,6 +15,7 @@ import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import powercrystals.core.asm.relauncher.Implementable;
 import powercrystals.core.position.BlockPosition;
+import powercrystals.core.util.UtilInventory;
 import powercrystals.minefactoryreloaded.core.BlockNBTManager;
 import powercrystals.minefactoryreloaded.core.MFRLiquidMover;
 import powercrystals.minefactoryreloaded.setup.Machine;
@@ -164,7 +165,8 @@ public abstract class TileEntityFactoryInventory extends TileEntityFactory imple
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack)
 	{
-		return true;
+		ItemStack slotContent = this.getStackInSlot(i);
+		return slotContent == null || UtilInventory.stacksEqual(itemstack, slotContent);
 	}
 	
 	@Override
@@ -325,7 +327,11 @@ public abstract class TileEntityFactoryInventory extends TileEntityFactory imple
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side)
 	{
-		return this.isStackValidForSlot(slot, itemstack);
+		ForgeDirection dir = ForgeDirection.getOrientation(side);
+		int start = getStartInventorySide(dir);
+		return slot >= start && slot < (start + getSizeInventorySide(dir)) &&
+				this.isStackValidForSlot(slot, itemstack) &&
+				itemstack.stackSize < Math.min(itemstack.getMaxStackSize(), getInventoryStackLimit());
 	}
 	
 	@Override
