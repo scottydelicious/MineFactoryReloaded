@@ -36,6 +36,7 @@ public class TileEntityEjector extends TileEntityFactory
 					continue;
 				}
 				
+				// TODO: get the opposite of side? unsure
 				IInventoryManager inventory = InventoryManager.create(chest.getValue(), chest.getKey());
 				Map<Integer, ItemStack> contents = inventory.getContents();
 				
@@ -47,7 +48,7 @@ public class TileEntityEjector extends TileEntityFactory
 					}
 					
 					if(chest.getValue() instanceof ISidedInventory)
-					{
+					{ // TODO: inventory.canRemoveItem(stack.getValue(), stack.getKey()) handles this
 						ISidedInventory sided = (ISidedInventory)chest.getValue();
 						if(!sided.canExtractItem(stack.getKey(), stack.getValue(), chest.getKey().ordinal()))
 						{
