@@ -1,7 +1,9 @@
 package skyboy.core.world;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -105,6 +107,21 @@ public class WorldServerProxy extends WorldServer {
 	    canNotSave = world.canNotSave;
 	    allPlayersSleeping = world.allPlayersSleeping;
 		customTeleporters = world.customTeleporters;
+		//TODO: MCPC+ compat
+		/*try {
+			Field[] fields = World.class.getDeclaredFields();
+			for (Field field : fields) {
+				if ("world".equals(field.getName())) {
+					field.setAccessible(true);
+					Field m = Field.class.getDeclaredField("modifiers");
+					m.setAccessible(true);
+					m.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+					field.set(this, field.get(world));
+					// instead of copying the CraftWorld, create CraftWorldProxy at runtime 
+					break;
+				}
+			}
+		} catch (Throwable _) {} //*/
 	}
 
 	@Override

@@ -57,6 +57,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SuppressWarnings("rawtypes")
 public class WorldProxy extends World {
+	public static World getProxiedWorld(World world) {
+		if (world instanceof WorldProxy)
+			return ((WorldProxy)world).proxiedWorld;
+		if (world instanceof WorldServerProxy)
+			return ((WorldServerProxy)world).proxiedWorld;
+		return null;
+	}
 	protected World proxiedWorld;
 
 	private static String getPar2String(World world) {
